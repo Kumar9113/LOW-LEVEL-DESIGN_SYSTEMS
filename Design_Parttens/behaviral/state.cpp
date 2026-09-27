@@ -1,12 +1,10 @@
 #include <iostream>
 using namespace std;
 
-class Order;
-
-// State interface
+// State Interface
 class State {
 public:
-    virtual void next(Order& order) = 0;
+    virtual void next() = 0;
     virtual ~State() {}
 };
 
@@ -25,30 +23,30 @@ public:
     }
 
     void next() {
-        state->next(*this);
+        state->next();
     }
 };
 
-// Concrete State
+// Concrete State 1
 class PendingState : public State {
 public:
-    void next(Order& order) override {
+    void next() override {
         cout << "Order shipped" << endl;
     }
 };
 
-// Concrete State
+// Concrete State 2
 class ShippedState : public State {
 public:
-    void next(Order& order) override {
+    void next() override {
         cout << "Order delivered" << endl;
     }
 };
 
-// Concrete State
+// Concrete State 3
 class DeliveredState : public State {
 public:
-    void next(Order& order) override {
+    void next() override {
         cout << "Order already delivered" << endl;
     }
 };
@@ -59,13 +57,16 @@ int main() {
     ShippedState shipped;
     DeliveredState delivered;
 
+    // Initial state = Pending
     Order order(&pending);
 
     order.next();
 
+    // Change state to Shipped
     order.setState(&shipped);
     order.next();
 
+    // Change state to Delivered
     order.setState(&delivered);
     order.next();
 
